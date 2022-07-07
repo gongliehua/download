@@ -14,6 +14,7 @@ var (
 	input     = flag.String("i", "", "m3u8 URL地址")
 	output    = flag.String("o", "", "存储目录")
 	threads   = flag.Int("t", 1, "协程数量")
+	sleep     = flag.Duration("s", 0, "休眠时间")
 	storage   string
 )
 

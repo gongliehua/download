@@ -14,5 +14,6 @@ go install
 # -i m3u8 URL地址
 # -o 存储目录
 # -t 协程数量
-download.exe -i http://example.com/video/1000/index.m3u8
+# -s 休眠时间
+download.exe -i http://example.com/video/10000/index.m3u8
 ```

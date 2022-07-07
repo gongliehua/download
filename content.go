@@ -48,7 +48,7 @@ func handleM3u8(url string, dir string, prefix string) (string, error) {
 	// 匹配密钥文件的规则
 	re := regexp.MustCompile(`URI="([\s\S]+)"`)
 	// 按数字命名.ts文件
-	tsIndex := 1000
+	tsIndex := 10000
 	// 逐行处理，并替换内容
 	for key, line := range strings.Split(content, "\n") {
 		// 剔除前后空格方便判断
@@ -72,7 +72,7 @@ func handleM3u8(url string, dir string, prefix string) (string, error) {
 						return "", err
 					}
 					tsIndex++
-					tsIndexName := fmt.Sprintf(prefix+"%04d.ts", tsIndex)
+					tsIndexName := fmt.Sprintf(prefix+"%05d.ts", tsIndex)
 					links = append(links, link{originUrl: matches[1], downloadUrl: href, localPath: tsIndexName})
 					// 此处密钥文件可以说是完全匹配，没必要像下面那样操作
 					content = strings.ReplaceAll(content, matches[1], tsIndexName)
@@ -84,7 +84,7 @@ func handleM3u8(url string, dir string, prefix string) (string, error) {
 				return "", err
 			}
 			tsIndex++
-			tsIndexName := fmt.Sprintf(prefix+"%04d.ts", tsIndex)
+			tsIndexName := fmt.Sprintf(prefix+"%05d.ts", tsIndex)
 			links = append(links, link{originUrl: line, downloadUrl: href, localPath: tsIndexName})
 			// 怕误伤，所以加个正则替换
 			// 还好正则替换支持 $i 写法，不然我都不想写下去了
@@ -276,6 +276,8 @@ func handleLinks(wg *sync.WaitGroup, countChan chan int, i int, links []link, di
 			}
 			break
 		}
+		// 休眠、控制下载速率
+		time.Sleep(*sleep)
 	}
 }
 
